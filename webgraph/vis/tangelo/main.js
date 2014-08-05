@@ -131,6 +131,7 @@
             vg.parse.spec("overview.json", function (overview) {
                 vg.parse.spec("overview-bar.json", function (overviewBar) {
                     d3.json('nodes?name=' + site, function (error, d) {
+			console.log("hi 10");
                         domain = d;
                         data.nodes.push({id: d._id, tldid: d.tldid, cluster: null});
                         nodeMap[d._id] = d;
@@ -159,9 +160,12 @@
                             }
                         });
                         d3.json('nodes?cluster=mcl&ids=' + JSON.stringify(all) + '&domain=' + JSON.stringify(all), function (error, nodes) {
+			    console.log("hi 100");
+
                             nodes.forEach(function (node) {
                                 data.nodes.push({id: node._id, tld: node.tld, tldid: node.tldid, cluster: node.cluster});
                                 nodeMap[node._id] = node;
+				console.log("node:", node);
                             });
                             nodes.forEach(function (node) {
                                 node.out.forEach(function (n) {

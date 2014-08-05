@@ -27,6 +27,11 @@ CSR_INDICES = None
 CSC_OFFSETS = None
 CSC_INDICES = None
 
+def add_extras_for_tangelo(ret):
+    ret["tld"] = ".edu"
+    ret["tldid"] = ret["id"]
+    ret["inout"] = list(set(ret["in"] + ret["out"]))
+
 
 def subgraph_from_ids(node_ids):
     node_ids = set(node_ids)
@@ -70,6 +75,7 @@ def site():
             ret = neighborhood_from_idx(name)
         except ValueError:          
             ret = neighborhood_from_name(name)
+        add_extras_for_tangelo(ret)
         print("Returning:", ret)
         if len(ret) == 0:
             raise
@@ -92,6 +98,7 @@ def subgraph():
     except:
         print_exc()
         import pdb; pdb.set_trace()
+    map(add_extras_for_tangelo, ret)
     return json.dumps(ret)
 
 
