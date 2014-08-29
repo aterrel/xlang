@@ -15,7 +15,7 @@ UNAME_S := $(shell uname -s)
         SERVER_DIR=server
 	CC=clang -std=c11 -g -O0
     endif
-CC := /opt/local/bin/clang-mp-3.5 -g -O0
+# CC := /opt/local/bin/clang-mp-3.5 -g -O0
 DEBUG = -g -O0
 
 

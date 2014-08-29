@@ -196,10 +196,10 @@ td_env_t *td_env_r(char *homedir) {
     if (h == NULL) {
       fprintf(stderr, "%s\n", dlerror());
     }
-    fprintf(stderr, "h: 0x%llx\n", h);
+    fprintf(stderr, "h: 0x%p\n", h);
     td_env_t *(*init)(char*) = dlsym(h, "td_r_init");
     //cached_r_env = init(homedir);
-    fprintf(stderr, "got here: 0x%llx\n", init);
+    fprintf(stderr, "got here: 0x%p\n", init);
     init(homedir);
     fprintf(stderr, "after init\n");
     
@@ -221,10 +221,15 @@ int td_create_simple_graph(graph_t *graph)
   static char* names[7] = {"a", "b", "c", "d", "e", "f", "g"};
   static unsigned int row_offsets[8] = {0,3,6,9,11,14,15,15};
   static int col_indices[15] = {1,2,3,0,2,4,3,4,5,5,6,2,5,6,6};
+  static double node_values[7] = {1.0, 2.0, 1.5, -1.0, 2.0, 7.5, 1.75};
+  static double edge_values[15] = {1, 2, 4, 8, 16, 24, 96,
+                                   3, 5, 7, 9, 11, 13, 15, 17};
 
   graph->numNodes = num_nodes;
   graph->numEdges = num_edges;
   graph->nodeNames = names;
+  graph->nodeValues = node_values;
+  graph->edgeValues = edge_values;
   graph->rowOffsets = row_offsets;
   graph->colIndices = col_indices;
 

@@ -40,7 +40,7 @@ static td_tag_t py_type_to_td(PyObject *pVal)
 
         unsigned long long vv;
         vv = PyLong_AsUnsignedLongLong(pVal);
-        if ( v == (unsigned long long) -1 && PyErr_Occurred() ) {
+        if ( vv == (unsigned long long) -1 && PyErr_Occurred() ) {
             PyErr_Clear();
             return TD_OBJECT;
         }
@@ -208,7 +208,8 @@ static void to_td_val(td_val_t *out, PyObject *pVal)
 static PyObject *pyarray_from_td_val(td_val_t *v){
     td_array_t *arr = (td_array_t*)v->object;
     npy_intp arr_shape[arr->ndims];
-    for (size_t i=0; i<arr->ndims; ++i) arr_shape[i] = arr->length;
+    size_t i;
+    for (i=0; i<arr->ndims; ++i) arr_shape[i] = arr->length;
     int np_type = td_type_to_numpy(arr->eltype);
 
     PyObject *py_obj = PyArray_SimpleNewFromData(arr->ndims,
@@ -293,6 +294,7 @@ PyObject* td_py_get_callable(char *fname)
     pModule = PyImport_Import(pName);
     Py_DECREF(pName);
     if (pModule == NULL) {
+        PyErr_Print();
         fprintf(stderr, "Error importing module %s\n", modname);
         return NULL;
     }
@@ -300,6 +302,7 @@ PyObject* td_py_get_callable(char *fname)
     pFunc = PyObject_GetAttrString(pModule, funcname);
     Py_DECREF(pModule);
     if (pFunc == NULL || !PyCallable_Check(pFunc)){
+        PyErr_Print();
         fprintf(stderr, "Could not get a callable %s\n", fname);
         if (pFunc != NULL) Py_DECREF(pFunc);
         return NULL;
